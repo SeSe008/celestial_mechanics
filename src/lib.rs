@@ -22,7 +22,7 @@ pub fn App() -> impl IntoView {
         <Html attr:lang="en" attr:dir="ltr" attr:data-theme="light"/>
 
         // sets the document title
-        <Title text="Orbital Velocity Calculator"/>
+        <Title text="Planet Properties Calculator"/>
 
         // injects metadata in the <head> of the page
         <Meta charset="UTF-8"/>

@@ -181,7 +181,7 @@ pub fn OrbitVisualization(planet: ReadSignal<PlanetData>) -> impl IntoView {
                     fallback=move || {view!{
                         <span>{format!("At angle: {:.2} Rads and radius {:.2} AU the velocity is {:.3} km/s", mouse_properties.get().1,  mouse_properties.get().2 / (1.496 * (10.0_f64).powi(11)), mouse_properties.get().3)}</span>
                     }}>
-                    <span>{format!("At angle: {:.2} Rads and radius {:.2} AU the velocity is {:.3} km/s and the gravitational force is {:.3e} N", mouse_properties.get().1,  mouse_properties.get().2 / (1.496 * (10.0_f64).powi(11)), mouse_properties.get().3, mouse_properties.get().4)}</span>
+                    <span>{format!("At angle: {:.2} Rads and radius {:.2} AU the velocity is {:.3} km/s and the gravitational force with the Sun is {:.3e} N", mouse_properties.get().1,  mouse_properties.get().2 / (1.496 * (10.0_f64).powi(11)), mouse_properties.get().3, mouse_properties.get().4)}</span>
                 </Show>
             </div>
         </Show>

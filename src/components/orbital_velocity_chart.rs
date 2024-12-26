@@ -1,5 +1,6 @@
 use leptos::prelude::*;
 use leptos_chartistry::*;
+use leptos_chartistry::IntoInner;
 use std::f64::consts::PI;
 
 use crate::utils::orbital_velocity::calculate_orbital_velocity;
