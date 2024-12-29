@@ -38,11 +38,11 @@ fn normalize_radius_points(radius_points_vec: &mut Vec<(i8, Vec<RadiusPoint>)>, 
     if let Some(max_radius) = max_radius {
         for section in radius_points_vec {
             for point in section.1.iter_mut() {
-                point.radius = (point.radius / max_radius) * height.min(width) / 2.0;
+                point.radius = (point.radius / max_radius) * (height.min(width) - 16.0) / 2.0;
             }
         }
         for point in radius_points {
-            point.radius = (point.radius / max_radius) * height.min(width) / 2.0;
+            point.radius = (point.radius / max_radius) * (height.min(width) - 16.0) / 2.0;
         }
 
         max_radius
@@ -81,7 +81,7 @@ fn mouse_hover(ctx: Rc<CanvasRenderingContext2d>, width: f64, height: f64, max_r
 
             draw_scene(*planet, set_mouse_properties, false);
 
-            let radius_normalized: f64 = (radius / max_radius) * (height.min(width) as f64) / 2.0;
+            let radius_normalized: f64 = (radius / max_radius) * ((height.min(width) as f64) - 16.0) / 2.0;
             ctx.set_stroke_style_str("red");    
             ctx.begin_path();
             ctx.move_to(width as f64 / 2.0, height as f64 / 2.0);
@@ -102,11 +102,11 @@ fn draw_grid_lines(ctx: &CanvasRenderingContext2d, width: f64, height: f64, plan
 
     //Calculate special points
     let periapsis = calculate_radius((planet.a).0.get(), (planet.e).0.get(), 0.0);
-    let periapsis_normalized = (periapsis / max_radius) * height.min(width) / 2.0;
+    let periapsis_normalized = (periapsis / max_radius) * (height.min(width) - 16.0) / 2.0;
     let apoapsis = calculate_radius((planet.a).0.get(), (planet.e).0.get(), PI);
-    let apoapsis_normalized = (apoapsis / max_radius) * height.min(width) / 2.0;
+    let apoapsis_normalized = (apoapsis / max_radius) * (height.min(width) - 16.0) / 2.0;
     let vert_radius = calculate_radius((planet.a).0.get(), (planet.e).0.get(), PI / 2.0);
-    let vert_radius_normalized = (vert_radius / max_radius) * height.min(width) / 2.0;
+    let vert_radius_normalized = (vert_radius / max_radius) * (height.min(width) - 16.0) / 2.0;
 
     
     // Draw the grid-lines and labels
