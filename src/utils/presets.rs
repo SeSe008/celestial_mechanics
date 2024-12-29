@@ -123,11 +123,18 @@ pub fn load_presets() -> Vec<PlanetPreset> {
             e: 0.952
         },
         PlanetPreset {
+            name: String::from("2017 MB7"),
+            m: 0.0,
+            d: 0.0005,
+            a: 1758.49,
+            e: 0.998
+        },
+        PlanetPreset {
             name: String::from("2014 FE72"),
             m: 0.0,
             d: 0.0212,
             a: 2044.34,
             e: 0.983
-        },
+        }
     ];
 }

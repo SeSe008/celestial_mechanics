@@ -4,7 +4,7 @@ use wasm_bindgen::JsCast;
 
 use crate::utils::presets::*;
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Copy)]
 pub struct PlanetData {
     pub a_input: (ReadSignal<f64>, WriteSignal<f64>),
     pub a: (ReadSignal<f64>, WriteSignal<f64>),

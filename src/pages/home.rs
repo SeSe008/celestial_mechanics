@@ -1,7 +1,7 @@
 //use crate::components::calculations::ExampleSedna;
 use leptos::prelude::*;
 
-use crate::components::{planet::{Inputs, create_planet}, orbital_velocity_chart::VelocityChart, orbit_visualization::OrbitVisualization, small_properties::SmallProperties, gravitational_force_with_sun_chart::GravitationalForceWithSunChart};
+use crate::components::{planet::{Inputs, create_planet}, orbital_velocity_chart::VelocityChart, orbit_visualization::OrbitVisualization, small_properties::SmallProperties, gravitational_force_with_sun_chart::GravitationalForceWithSunChart, orbit_visualization_options::OrbitVisualizationOptions};
 
 /// Default Home Page
 #[component]
@@ -35,6 +35,7 @@ pub fn Home() -> impl IntoView {
             <SmallProperties planet={planet} />
             <Inputs planet_signal=(planet, update_planet)/>
             <GravitationalForceWithSunChart planet={planet} />
+            <OrbitVisualizationOptions planet={planet} />
         </div>
         </ErrorBoundary>
     }

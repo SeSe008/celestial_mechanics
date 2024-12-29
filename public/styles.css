@@ -158,3 +158,27 @@ body {
     grid-column: 2;
     grid-row: 2;
 }
+
+#orbit_visualization_options {
+    display: flex;
+    flex-direction: column;
+    padding: 0 1rem;
+    gap: 5%;
+    justify-content: center;
+}
+
+#orbit_visualization_options > button {
+    cursor: pointer;
+    border: 3px solid var(--border);
+    border-radius: 1rem;
+    outline: none;
+    /* background: linear-gradient(90deg, rgba(9,9,121,1) 0%, rgba(117,34,195,1) 45%, rgba(28,104,119,1) 100%); */
+    background-color: var(--background_highlight);
+    color: white;
+    font-size: large;
+    padding: 1rem;
+}
+
+#orbit_visualization_options > button:hover {
+    box-shadow: 0 0 .5rem white;
+}
