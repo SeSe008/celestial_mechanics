@@ -63,49 +63,86 @@ pub fn get_radius_points(a: f64, e: f64, start: f64, end: f64, step: f64) -> Vec
     data
 }
 
-fn mouse_hover(ctx: Rc<CanvasRenderingContext2d>, width: f64, height: f64, max_radius: f64, canvas: Rc<HtmlCanvasElement>, planet: Rc<RefCell<PlanetData>>, set_mouse_properties: WriteSignal<(bool, f64, f64, f64, f64)>) {
-    // Add mousemove event listener
+fn mouse_hover(
+    ctx: Rc<CanvasRenderingContext2d>,
+    width: f64,
+    height: f64,
+    max_radius: f64,
+    canvas: Rc<HtmlCanvasElement>,
+    planet: Rc<RefCell<PlanetData>>,
+    set_mouse_properties: WriteSignal<(bool, f64, f64, f64, f64)>,
+    event_closure: Rc<RefCell<Option<Closure<dyn FnMut(MouseEvent)>>>>,
+) {
+    // If a closure already exists, remove it
+    if let Some(existing_closure) = &*event_closure.borrow() {
+        let window = web_sys::window().unwrap();
+        window
+            .remove_event_listener_with_callback("mousemove", existing_closure.as_ref().unchecked_ref())
+            .unwrap();
+    }
+
+    // Create a new mousemove event
     let hover_closure = Closure::wrap(Box::new(move |event: MouseEvent| {
         let (x, y, canvas_x, canvas_y) = get_mouse_position(&event, &canvas);
 
-        if canvas_x >= 0.0 && canvas_x <= width as f64 && canvas_y >= 0.0 && canvas_y <= height as f64 {
+        if canvas_x >= 0.0 && canvas_x <= width && canvas_y >= 0.0 && canvas_y <= height {
             let planet = planet.borrow();
 
-            let canvas_x = canvas_x - width as f64 / 2.0;
-            let canvas_y = canvas_y - height as f64 / 2.0;
-            let angle = canvas_y.atan2(canvas_x);                   
+            let canvas_x = canvas_x - width / 2.0;
+            let canvas_y = canvas_y - height / 2.0;
+            let angle = canvas_y.atan2(canvas_x);
             let radius = calculate_radius(planet.a.0.get_untracked(), planet.e.0.get_untracked(), angle);
             let velocity = calculate_orbital_velocity(planet.a.0.get_untracked(), planet.e.0.get_untracked(), planet.m_sun, planet.g, angle);
-            let gravitational_force = calculate_gravitational_force_with_sun(planet.m_object.0.get_untracked(), planet.m_sun, planet.m_earth, planet.a.0.get_untracked(), planet.e.0.get_untracked(), planet.g, angle);
+            let gravitational_force = calculate_gravitational_force_with_sun(
+                planet.m_object.0.get_untracked(),
+                planet.m_sun,
+                planet.m_earth,
+                planet.a.0.get_untracked(),
+                planet.e.0.get_untracked(),
+                planet.g,
+                angle,
+            );
+
             set_mouse_properties((true, angle, radius, velocity, gravitational_force));
 
-            draw_scene(*planet, set_mouse_properties, false);
-
-            let radius_normalized: f64 = (radius / max_radius) * ((height.min(width) as f64) - 16.0) / 2.0;
-            ctx.set_stroke_style_str("red");    
+            let radius_normalized = (radius / max_radius) * ((height.min(width)) - 16.0) / 2.0;
+            ctx.set_stroke_style_str("red");
             ctx.begin_path();
-            ctx.move_to(width as f64 / 2.0, height as f64 / 2.0);
-            ctx.line_to(radius_normalized * angle.cos() + width as f64 / 2.0, radius_normalized * angle.sin() + height as f64 / 2.0);
+            ctx.move_to(width / 2.0, height / 2.0);
+            ctx.line_to(
+                radius_normalized * angle.cos() + width / 2.0,
+                radius_normalized * angle.sin() + height / 2.0,
+            );
             ctx.stroke();
 
             let info_div = document().get_element_by_id("orbit_visualization_info").unwrap();
-            info_div.set_attribute("style", &format!("left: {}px; top: {}px;", x, y)).unwrap();
+            info_div
+                .set_attribute("style", &format!("left: {}px; top: {}px;", x, y))
+                .unwrap();
         } else {
             set_mouse_properties((false, 0.0, 0.0, 0.0, 0.0));
         }
     }) as Box<dyn FnMut(_)>);
-    document().add_event_listener_with_callback("mousemove", hover_closure.as_ref().unchecked_ref()).unwrap();
-    hover_closure.forget();
+
+    // Add the new event listener
+    let window = web_sys::window().unwrap();
+    window
+        .add_event_listener_with_callback("mousemove", hover_closure.as_ref().unchecked_ref())
+        .unwrap();
+
+    // Store the closure for future use
+    *event_closure.borrow_mut() = Some(hover_closure);
 }
+
 
 fn draw_grid_lines(ctx: &CanvasRenderingContext2d, width: f64, height: f64, planet: PlanetData, max_radius: f64) {
 
     //Calculate special points
-    let periapsis = calculate_radius((planet.a).0.get(), (planet.e).0.get(), 0.0);
+    let periapsis = calculate_radius((planet.a).0.get_untracked(), (planet.e).0.get_untracked(), 0.0);
     let periapsis_normalized = (periapsis / max_radius) * (height.min(width) - 16.0) / 2.0;
-    let apoapsis = calculate_radius((planet.a).0.get(), (planet.e).0.get(), PI);
+    let apoapsis = calculate_radius((planet.a).0.get_untracked(), (planet.e).0.get_untracked(), PI);
     let apoapsis_normalized = (apoapsis / max_radius) * (height.min(width) - 16.0) / 2.0;
-    let vert_radius = calculate_radius((planet.a).0.get(), (planet.e).0.get(), PI / 2.0);
+    let vert_radius = calculate_radius((planet.a).0.get_untracked(), (planet.e).0.get_untracked(), PI / 2.0);
     let vert_radius_normalized = (vert_radius / max_radius) * (height.min(width) - 16.0) / 2.0;
 
     
@@ -156,7 +193,7 @@ fn draw_orbit(ctx: &CanvasRenderingContext2d, radius_points: &[RadiusPoint], wid
     ctx.stroke();
 }
 
-pub fn draw_scene(planet: PlanetData, set_mouse_properties: WriteSignal<(bool, f64, f64, f64, f64)>, with_hover: bool) {
+pub fn draw_scene(planet: PlanetData, set_mouse_properties: WriteSignal<(bool, f64, f64, f64, f64)>, with_hover: bool, event_closure: Rc<RefCell<Option<Closure<dyn FnMut(MouseEvent)>>>>,) {
     let mut radius_points = get_radius_points(
         (planet.a).0.get(),
         (planet.e).0.get(),
@@ -199,16 +236,17 @@ pub fn draw_scene(planet: PlanetData, set_mouse_properties: WriteSignal<(bool, f
     // Draw grid lines
     draw_grid_lines(&ctx, width, height, planet, max_radius);
 
-    if with_hover { 
-        mouse_hover(Rc::new(ctx), width, height, max_radius, Rc::new(canvas), Rc::new(RefCell::new(planet)), set_mouse_properties);
+    if with_hover {
+        mouse_hover(Rc::new(ctx), width, height, max_radius, Rc::new(canvas), Rc::new(RefCell::new(planet)), set_mouse_properties, event_closure.clone());
     }
 }
 
 pub fn create_scene(planet_signal: ReadSignal<PlanetData>, set_mouse_properties: WriteSignal<(bool, f64, f64, f64, f64)>) {
+    let event_closure = Rc::new(RefCell::new(None));
     Effect::new(move |_| {
         let planet = planet_signal.get();
 
-        draw_scene(planet, set_mouse_properties, true);
+        draw_scene(planet, set_mouse_properties, true,event_closure.clone());
     });
 }
 

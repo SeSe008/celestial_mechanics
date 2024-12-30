@@ -18,17 +18,17 @@ pub fn OrbitVisualizationOptions(planet: ReadSignal<PlanetData>) -> impl IntoVie
                 );
 
                 add_orbit(&radius_points);
-                draw_scene(planet.get(), signal((false, 0.0, 0.0, 0.0, 0.0)).1, false);
+                draw_scene(planet.get(), signal((false, 0.0, 0.0, 0.0, 0.0)).1, false, std::rc::Rc::new(std::cell::RefCell::new(None)));
             }>"Add Orbit"</button>
             <button on:click=move |_| {
                 remove_last_orbit();
 
-                draw_scene(planet.get(), signal((false, 0.0, 0.0, 0.0, 0.0)).1, false);
+                draw_scene(planet.get(), signal((false, 0.0, 0.0, 0.0, 0.0)).1, false, std::rc::Rc::new(std::cell::RefCell::new(None)));
             }>"Remove last Orbit"</button>
             <button on:click=move |_| {
                 clear_orbits();
 
-                draw_scene(planet.get(), signal((false, 0.0, 0.0, 0.0, 0.0)).1, false);
+                draw_scene(planet.get(), signal((false, 0.0, 0.0, 0.0, 0.0)).1, false, std::rc::Rc::new(std::cell::RefCell::new(None)));
             }>"Clear Orbits"</button>
         </div>
     }
