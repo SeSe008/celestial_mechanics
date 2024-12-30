@@ -197,8 +197,8 @@ fn draw_orbit(ctx: &CanvasRenderingContext2d, radius_points: &[RadiusPoint], wid
 
 pub fn draw_scene(planet: PlanetData, set_mouse_properties: WriteSignal<(bool, f64, f64, f64, f64)>, with_hover: bool, event_closure: Rc<RefCell<Option<Closure<dyn FnMut(MouseEvent)>>>>,) {
     let mut radius_points = get_radius_points(
-        (planet.a).0.get(),
-        (planet.e).0.get(),
+        (planet.a).0.get_untracked(),
+        (planet.e).0.get_untracked(),
         0.0,
         2.0 * PI,
         0.01,
@@ -254,14 +254,11 @@ pub fn create_scene(planet_signal: ReadSignal<PlanetData>, set_mouse_properties:
 
 //Canvas visualization of the orbit with eccentricity and labels
 #[component]
-pub fn OrbitVisualization(planet: ReadSignal<PlanetData>) -> impl IntoView {
-    // Tuple of (is_hovering, angle, radius, velocity)
-    let (mouse_properties, set_mouse_properties) = signal((false, 0.0, 0.0, 0.0, 0.0));
-    
+pub fn OrbitVisualization(planet: ReadSignal<PlanetData>, mouse_properties: ReadSignal<(bool, f64, f64, f64, f64)>, set_mouse_properties: WriteSignal<(bool, f64, f64, f64, f64)>) -> impl IntoView {    
     create_scene(planet, set_mouse_properties);
 
     view! { 
-        <canvas id="orbit_visualization_canvas" />
+        <canvas id="orbit_visualization_canvas" class="visible_element"/>
         <Show when=move || { mouse_properties.get().0 }>
             <div id="orbit_visualization_info">
                 <Show when=move || {mouse_properties.get().4 != 0.0}

@@ -53,7 +53,7 @@ pub fn GravitationalForceWithSunChart(planet: ReadSignal<PlanetData>) -> impl In
         .with_x_range(0.0, 6.3);
 
     view! {
-        <div id="gravitational_force_with_sun_chart">
+        <div id="gravitational_force_with_sun_chart" class="invisible_element">
             <Show when=move || planet.get().m_object.0.get() != 0.0
                 fallback=|| view!{<div class="small_property">"Mass is undefined"</div>}>
                 <Chart

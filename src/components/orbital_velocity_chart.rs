@@ -51,7 +51,7 @@ pub fn VelocityChart(planet: ReadSignal<PlanetData>) -> impl IntoView {
         .with_x_range(0.0, 6.3);
 
     view! {
-        <div id="velocity_chart">
+        <div id="velocity_chart" class="invisible_element">
             <Chart
                 aspect_ratio=AspectRatio::from_env()
                 series=series

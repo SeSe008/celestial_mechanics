@@ -43,7 +43,7 @@ fn RotationalPeriod(planet: ReadSignal<PlanetData>) -> impl IntoView {
 #[component]
 pub fn SmallProperties(planet: ReadSignal<PlanetData>) -> impl IntoView {
     view! {
-        <div id="small_properties">
+        <div id="small_properties" class="invisible_element">
             <Show when=move || {planet.get().m_object.0.get() != 0.0} fallback=|| view!{
                 <div class="small_property">"Some properties are missing, due to the mass being unknown."</div>
             }>

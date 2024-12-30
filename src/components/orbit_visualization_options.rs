@@ -6,7 +6,7 @@ use super::planet::PlanetData;
 #[component]
 pub fn OrbitVisualizationOptions(planet: ReadSignal<PlanetData>) -> impl IntoView {
     view!{
-        <div id="orbit_visualization_options">
+        <div id="orbit_visualization_options" class="invisible_element">
             <span>"Add or remove orbits to the visualization"</span>
             <button on:click=move |_| {
                 let radius_points = get_radius_points(

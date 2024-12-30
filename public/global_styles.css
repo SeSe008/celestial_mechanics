@@ -1,0 +1,47 @@
+:root {
+    --background_highlight: #2b303b;
+    --border: #c0c5ce;
+}
+
+body {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    text-align: center;
+    background-color: rgb(27, 25, 33);
+    color: white;
+    overflow: hidden;
+}
+
+#orbit_visualization_info {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    padding: .5rem;
+    height: min-content;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background-color: var(--background_highlight);
+    pointer-events: none;
+}
+
+#orbit_visualization_canvas {
+    width: 95%;
+    height: 95%;
+    justify-self: center;
+    align-self: center;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background-color: var(--background_highlight);
+}
+
+.container {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+}
