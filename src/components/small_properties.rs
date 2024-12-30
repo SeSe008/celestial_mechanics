@@ -26,7 +26,7 @@ fn GravitationalAcceleration(planet: ReadSignal<PlanetData>) -> impl IntoView {
 fn LiftEnergy(planet: ReadSignal<PlanetData>) -> impl IntoView {
     view! {
         <div class="small_property">
-            <span>"Work required to lift an 1000kg object from the surface to a 75km altitude: " {move || format!("{:.2e}", calculate_lift_energy(planet.get().d.0.get(), planet.get().d_earth, planet.get().m_object.0.get(), planet.get().m_earth, planet.get().g))} " J"</span>
+            <span>"Work required to lift an 1000kg object from the surface to a 750km altitude: " {move || format!("{:.2e}", calculate_lift_energy(planet.get().d.0.get(), planet.get().d_earth, planet.get().m_object.0.get(), planet.get().m_earth, planet.get().g))} " J"</span>
         </div>
     }
 }
