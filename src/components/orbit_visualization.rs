@@ -105,6 +105,8 @@ fn mouse_hover(
 
             set_mouse_properties((true, angle, radius, velocity, gravitational_force));
 
+            draw_scene(*planet, signal((false, 0.0, 0.0, 0.0, 0.0)).1, false, Rc::new(RefCell::new(None)));
+
             let radius_normalized = (radius / max_radius) * ((height.min(width)) - 16.0) / 2.0;
             ctx.set_stroke_style_str("red");
             ctx.begin_path();
