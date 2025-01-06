@@ -8,7 +8,7 @@ use super::planet::PlanetData;
 fn EscapeVelocity(planet: ReadSignal<PlanetData>) -> impl IntoView {
     view! {
         <div class="small_property">
-            <span>"Escape Velocity: " {move || format!("{:.3}", calculate_escape_velocity(planet.get().d.0.get(), planet.get().d_earth, planet.get().m_object.0.get(), planet.get().m_earth))} "km/s"</span>
+            <span>"Escape Velocity: " {move || format!("{:.3}", calculate_escape_velocity(planet.get().d.0.get(), planet.get().d_earth, planet.get().m_object.0.get(), planet.get().m_earth))} " km/s"</span>
         </div>
     }
 }
