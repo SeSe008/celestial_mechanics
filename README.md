@@ -1,5 +1,5 @@
 # Celestial Mechanics
-Calculator for properties of a planet.
+Calculator for properties of a planet made with Rust/Leptos.
 
 Features:
 - Orbit velocity
